@@ -1,5 +1,0 @@
-CompileFlags:
-  Add: [-std=c++26]
-Diagnostics:
-  ClangTidy:
-    Add: [bugprone-*, performance-*]

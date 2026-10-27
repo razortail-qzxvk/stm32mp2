@@ -1,0 +1,71 @@
+STM32CubeProgrammer DFU:
+打开文件:
+FLASH-stm32mp2-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10\stm32mp2-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10\images\stm32mp2\flashlayout_st-image-weston\optee\FlashLayout_sdcard_stm32mp257f-dk-ca35tdcid-ostl-m33-examples-optee.tsv
+定位 Binaries path:
+FLASH-stm32mp2-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10\stm32mp2-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10\images\stm32mp2\
+
+SDK(WSL):
+解压后执行 .sh脚本, ST默认设有路径和source指南.
+
+---
+
+待办:
+研究一下如何定位某个外设依赖的电源域&时钟门控&RIF上下文
+printf 有两个问题, 第一个是"非期望的\0"(环形截断问题), 第二个是不知道为什么 linux cat tarce0 不完整.
+倒立摆物理引擎
+
+C:\ATfE\bin\llvm-readelf.exe -S -x .resource_table build\stm32mp257fak3-m33.elf
+C:\Users\Admin\STM32Cube\Repository\STM32Cube_FW_MP2_V1.3.2\Utilities\optee_os\scripts\sign_rproc_fw.py
+C:\Users\Admin\STM32Cube\Repository\STM32Cube_FW_MP2_V1.3.2\Utilities\optee_os\keys\default.pem
+
+python -m pip install pyelftools cryptography pycryptodomex
+python .\sign_rproc_fw.py --in .\build\stm32mp257fak3-m33.elf --out build\stm32mp257fak3-m33_sign.bin --key .\default.pem --plat-tlv BOOTADDR 0x80100000
+
+cd /sys/class/remoteproc/remoteproc0/
+echo stop > state
+echo stm32mp257fak3-m33_sign.bin > firmware
+echo start > state
+cat /sys/kernel/debug/remoteproc/remoteproc0/trace0
+
+---
+
+remoteproc:
+  控制节点(/sys/class/remoteproc/):
+  - device
+  - subsystem
+  - power
+  - uevent
+  ---
+  - name
+  - state
+  - fw_format(支持的固件格式 ELF/TEE)
+  - firmware(state 为 offline 时, 写入文件名即可切换固件; 默认寻找 /lib/firmware/ 目录下的文件)
+  - recovery(enabled/disabled/recover MCU崩溃后是否自动恢复)
+  - coredump(default/inline/disabled 决定崩溃后是否内存转储)
+
+---
+
+OpenSTLinux:
+Starter Package:
+FLASH-stm32mp2-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10.tar.gz:
+FlashLayout_sdcard_stm32mp257f-dk-ca35tdcid-ostl-m33-examples-optee.tsv:
+/usr/local/Cube-M33-examples/STM32MP257F-DK/Demonstrations/USBPD_DRP_UCSI:
+
+  这里会有一个脚本(fw_cortex_m33.sh), 也会有一个示例(./lib/firmware/USBPD_DRP_UCSI_CM33_NonSecure_sign.bin).
+  脚本会将这个文件拷贝到(/lib/firmware/), 修改 remoteproc 的 firmware 和 state.
+
+---
+
+STM32CubeMX 在生成链接脚本的时候, 已经留好了 IPC_SHMEM_1.
+IPC_SHMEM 的意思是核间通信共享内存(Inter-Processor Communication Shared Memory).
+.resource_table 是内存的第一个重要成员. 它描述了MCU的 trace_buffer, 标注了地址和长度.
+trace_buffer 可以放在 IPC_SHMEM 里也可以不贴标签放在RAM(.bss)里.
+
+DCache 可能会影响 trace_buffer 存放进 DDR. 但只要 trace_buffer 在 IPC_SHMEM_1(Non-Cacheable) 就不会有事.
+每次打印完换行符时, 调用一次 HAL_DCACHE_CleanByAddr() 也有助于解决这个问题.
+
+---
+
+\\wsl.localhost\Ubuntu-24.04\home\tzy\downloads\stm32mp-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10\sources\ostl-linux\external-dt-v6.0-stm32mp-r3.1-r0\external-dt-v6.0-stm32mp-r3.1\stm32mp2\a35-td\
+
+~/downloads/stm32mp-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10/sources/ostl-linux/external-dt-v6.0-stm32mp-r3.1-r0/external-dt-v6.0-stm32mp-r3.1/stm32mp2/a35-td

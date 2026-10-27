@@ -3,7 +3,7 @@ Language: Cpp
 BasedOnStyle: LLVM # LLVM/Google/Chromium/Mozilla/WebKit/Microsoft/GNU/InheritParentConfig
 
 # 取消列限制
-ColumnLimit: 120
+ColumnLimit: 999
 
 # 一行出
 BraceWrapping:
@@ -18,3 +18,15 @@ BreakTemplateDeclarations: Leave
 # 指针类型修饰符靠左
 DerivePointerAlignment: false
 PointerAlignment: Left
+
+# 宏对齐
+# AlignConsecutiveMacros:
+#     Enabled: true
+#     AcrossEmptyLines : true
+#     AcrossComments: true
+# AlignTrailingComments:
+#   Kind: Always
+#   OverEmptyLines: 2
+
+# 禁止自动头文件排序
+SortIncludes: Never

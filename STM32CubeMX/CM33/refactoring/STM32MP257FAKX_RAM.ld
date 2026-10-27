@@ -16,6 +16,7 @@
  *     libm.a ( * )
  *     libgcc.a ( * )
  *   }
+ * - KEEP (*(.resource_table*)) -> KEEP (*(.resource_table)) + KEEP (*(SORT_BY_NAME(.resource_table.*)))
  */
 
 /*
@@ -107,7 +108,8 @@ SECTIONS
 
     .resource_table : ALIGN(LINKER_DEFAULT_ALIGNMENT)
     {
-        KEEP (*(.resource_table*))
+        KEEP (*(.resource_table))
+        KEEP (*(SORT_BY_NAME(.resource_table.*)))
         . = ALIGN(LINKER_DEFAULT_ALIGNMENT);
     } >IPC_SHMEM_1
 

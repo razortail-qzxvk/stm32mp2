@@ -8,6 +8,7 @@ set(global_marcos USE_HAL_DRIVER USE_FULL_LL_DRIVER CORE_CM33 STM32MP257Fxx)
 target_sources(${PROJECT_NAME}
   PRIVATE
     main.cpp
+    retarget_io.cpp
 )
 
 file(GLOB_RECURSE ALL_CXX_MODULES
@@ -37,6 +38,7 @@ file(GLOB_RECURSE CUBEMX_C_SOURCES
     CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/STM32CubeMX/CM33/Core/Src/*.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/STM32CubeMX/Drivers/STM32MP2xx_HAL_Driver/Src/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/STM32CubeMX/Utilities/CoproSync/copro_sync.c"
 )
 list(REMOVE_ITEM CUBEMX_C_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/STM32CubeMX/CM33/Core/Src/sysmem.c")
 list(REMOVE_ITEM CUBEMX_C_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/STM32CubeMX/CM33/Core/Src/syscalls.c")
@@ -146,3 +148,12 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # --format=berkeley 输出格式
 
 # VERBATIM 确保命令字符串按字面意思处理, 不进行 CMake 变量替换等
+
+
+
+
+set_source_files_properties(
+  ${CMAKE_CURRENT_SOURCE_DIR}/STM32CubeMX/Utilities/CoproSync/copro_sync.c
+  PROPERTIES
+    COMPILE_OPTIONS "-Wno-unused-parameter"
+)

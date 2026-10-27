@@ -29,6 +29,16 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32mp2xx_hal.h"
 
+#include "stm32mp2xx_ll_ucpd.h"
+#include "stm32mp2xx_ll_bus.h"
+#include "stm32mp2xx_ll_rcc.h"
+#include "stm32mp2xx_ll_system.h"
+#include "stm32mp2xx_ll_pwr.h"
+#include "stm32mp2xx_ll_gpio.h"
+#include "stm32mp2xx_ll_dma.h"
+
+#include "stm32mp2xx_ll_exti.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -57,6 +67,22 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define VCONN_CC2_EN_Pin GPIO_PIN_3
+#define VCONN_CC2_EN_GPIO_Port GPIOC
+#define VCONN_CC1_EN_Pin GPIO_PIN_5
+#define VCONN_CC1_EN_GPIO_Port GPIOF
+#define USB_SWOE_Pin GPIO_PIN_2
+#define USB_SWOE_GPIO_Port GPIOH
+#define TCPP_INT_Pin GPIO_PIN_1
+#define TCPP_INT_GPIO_Port GPIOG
+#define BUTTON_USER2_Pin GPIO_PIN_11
+#define BUTTON_USER2_GPIO_Port GPIOC
+#define TCCP_EN_Pin GPIO_PIN_3
+#define TCCP_EN_GPIO_Port GPIOA
+#define USB_SWS_Pin GPIO_PIN_3
+#define USB_SWS_GPIO_Port GPIOH
+#define LED3_Pin GPIO_PIN_6
+#define LED3_GPIO_Port GPIOH
 
 /* USER CODE BEGIN Private defines */
 

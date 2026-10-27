@@ -1,4 +1,7 @@
+#include <cstdio>
+
 #include "main.h"
+import probe;
 
 extern "C" void SystemClock_Config(void);
 
@@ -16,6 +19,10 @@ int main() {
     SystemCoreClockUpdate();
   }
 
+  probe::do_GPIOH();
+
   while (true) {
+    // std::printf("Hello World.\n");
+    HAL_Delay(500);
   }
 }

@@ -18,6 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "copro_sync.h"
+#include "adc.h"
+#include "i2c.h"
+#include "ipcc.h"
+#include "rtc.h"
+#include "usart.h"
+#include "ucpd.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

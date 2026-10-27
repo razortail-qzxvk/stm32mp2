@@ -1,0 +1,14 @@
+RIF / K3 Security Architecture
+
+CID(Compartment ID) / PrivID
+Privilage Attribute & Security Attribute
+
+RIFSC(RIF Security Controller)
+RISAF(RIF Address Space Firewall) & RISAB(RIF Memory Block)
+RIF-aware Peripherals:
+  SECCFGR(Security Configuration Register)
+  PRIVCFGR(Privilege Configuration Register)
+  CIDCFGR(Compartment ID Configuration Register) (这里也同时含有 CFEN(CID Filtering Enable) 和 SEMEN(Semaphore Enable) 两个位)
+  SEMCR(Semaphore Control Register)
+
+TIFS (TI Foundational Security) + TISCI 协议
